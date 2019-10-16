@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.yufeng.entities.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,19 @@ public class UserController
         User user = new User();
         user.setId(userId);
         user.setUsername("Tom");
+        return user;
+    }
+
+    @PostMapping
+    public User create(@RequestBody @Valid User user, BindingResult bindingResult){
+        if(bindingResult.hasErrors())   //校验是否有错
+        {
+            bindingResult.getAllErrors()
+                    .stream().forEach(error -> System.out.println(error.getDefaultMessage()));
+            return new User();
+        }
+        System.out.println(user);
+        user.setId(1);
         return user;
     }
 }

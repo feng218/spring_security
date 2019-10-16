@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Date;
+
 /**
  * Created by Administrator on 2019/10/13.
  */
@@ -64,6 +66,38 @@ public class UserControllerTest
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isOk())   //响应码判断为200
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("Tom"))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
+    }
+
+    @Test
+    public void whenCreateSuccess() throws Exception
+    {
+        Date date = new Date();
+        System.out.println(date.getTime());
+        String bodyMessage = "{\"username\":\"Tom\",\"password\":\"root\",\"birthday\":" + date.getTime() + "}";
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post("/user")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(bodyMessage))
+                //响应的参数
+                .andExpect(MockMvcResultMatchers.status().isOk())   //响应码判断为200
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
+    }
+
+    @Test
+    public void whenCreateFail() throws Exception
+    {
+        Date date = new Date();
+        System.out.println(date.getTime());
+        String bodyMessage = "{\"username\":\"Tom\",\"password\":null,\"birthday\":" + date.getTime() + "}";
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.post("/user")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(bodyMessage))
+                //响应的参数
+                .andExpect(MockMvcResultMatchers.status().isOk())   //响应码判断为200
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                 .andReturn().getResponse().getContentAsString();
         System.out.println(contentAsString);
     }
