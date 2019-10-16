@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -15,6 +16,7 @@ public class User
     public interface SimpleView{}
     public interface DetailView extends SimpleView{}
 
+    @NotNull
     @JsonView(DetailView.class)
     private Integer id;
 
