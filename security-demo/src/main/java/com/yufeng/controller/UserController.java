@@ -4,6 +4,7 @@ import com.yufeng.entities.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,5 +35,14 @@ public class UserController
         list.add(new User());
         list.add(new User());
         return list;
+    }
+
+    //@GetMapping("/user/{id}")
+    @GetMapping("/user/{id:\\d+}")  //正则表达式, 参数必须是全数字
+    //public User getInfo(@PathVariable Integer id){
+    public User getInfo(@PathVariable(name = "id") Integer userId){
+        User user = new User();
+        user.setId(userId);
+        return user;
     }
 }
