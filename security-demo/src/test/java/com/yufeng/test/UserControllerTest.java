@@ -34,15 +34,37 @@ public class UserControllerTest
     @Test
     public void whenQuerySuccess() throws Exception
     {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user")
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get("/user")
                 .param("username", "jojo")
+                .param("id", "11")
+                .param("password", "123456")
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk())   //响应码判断为200
+                //返回集合的长度为3; $: 响应参数的根元素
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
+    }
 
-                //响应码判断为200
-                .andExpect(MockMvcResultMatchers.status().isOk())
+    @Test
+    public void whenGetInfoSuccess() throws Exception
+    {
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get("/user/333")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk())   //响应码判断为200
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("Tom"))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
+    }
 
-                //返回集合的长度为3
-                //$: 响应参数的根元素
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3));
+    @Test
+    public void whenGetInfoFail() throws Exception
+    {
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.get("/user/aaa")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk())   //响应码判断为200
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("Tom"))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(contentAsString);
     }
 }
